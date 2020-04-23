@@ -26,6 +26,8 @@ class Cursor
     end
   end
 
+  private
+
   def get_current_img
     case @state
     when CursorState::Normal
