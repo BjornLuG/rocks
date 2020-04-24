@@ -1,9 +1,9 @@
 require 'gosu'
 require 'chipmunk'
-require_relative 'constants'
-require_relative 'zorder'
-require_relative 'cursor'
-require_relative 'ship'
+require_relative 'components/constants'
+require_relative 'components/zorder'
+require_relative 'components/cursor'
+require_relative 'components/ship'
 
 class Game < Gosu::Window
   def initialize
