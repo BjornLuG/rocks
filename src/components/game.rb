@@ -16,12 +16,7 @@ class Game < Gosu::Window
 
     @background = Gosu::Image.new('src/assets/images/background.png')
 
-    @cursor = Cursor.new(
-      self,
-      Gosu::Image.new('src/assets/images/cursor/normal.png'),
-      Gosu::Image.new('src/assets/images/cursor/active.png'),
-      Gosu::Image.new('src/assets/images/cursor/active.png'),
-    )
+    @cursor = Cursor.new(self)
 
     @space = CP::Space.new
     @space.damping = 0.8

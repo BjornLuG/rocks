@@ -1,3 +1,4 @@
+require 'gosu'
 require_relative 'zorder'
 
 module CursorState
@@ -7,11 +8,11 @@ end
 class Cursor
   attr_accessor :visible, :state
 
-  def initialize(window, imgNormal, imgHover, imgActive)
+  def initialize(window)
     @window = window
-    @imgNormal = imgNormal
-    @imgHover = imgHover
-    @imgActive = imgActive
+    @imgNormal = Gosu::Image.new('src/assets/images/cursor/normal.png')
+    @imgHover = Gosu::Image.new('src/assets/images/cursor/active.png')
+    @imgActive = Gosu::Image.new('src/assets/images/cursor/active.png')
     @visible = true
     @state = CursorState::Normal
   end
