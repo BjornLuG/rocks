@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'src/game'
+require 'gosu'
+require 'chipmunk'
 
-game = Game.new
-game.show
+# Require all ruby files in lib
+Dir[File.join(__dir__, 'lib/**/*.rb')].sort.each { |file| puts file }
+
+# game = Game.new
+# game.show

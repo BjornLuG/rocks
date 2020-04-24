@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-require 'gosu'
-require 'chipmunk'
-require_relative 'components/constants'
-require_relative 'components/zorder'
-require_relative 'components/cursor'
-require_relative 'components/ship'
-
 # The main game class
 class Game < Gosu::Window
   def initialize
@@ -17,7 +10,7 @@ class Game < Gosu::Window
     # Fixed dt to improve chipmunk performance
     @dt = 1.0 / 60.0
 
-    @background = Gosu::Image.new('src/assets/images/background.png')
+    @background = Gosu::Image.new('lib/assets/images/background.png')
 
     @cursor = Cursor.new(self)
 

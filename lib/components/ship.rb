@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-require 'gosu'
-require 'chipmunk'
 require_relative 'sprite'
-require_relative 'zorder'
-require_relative 'constants'
 
 # The player ship
 class Ship < Sprite
   def initialize(window, space, specs)
-    img = Gosu::Image.new('src/assets/images/ship.png')
+    img = Gosu::Image.new('lib/assets/images/ship.png')
     radius = [img.width, img.height].max / 2.0
     body = CP::Body.new(specs[:mass], specs[:inertia])
     @shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)

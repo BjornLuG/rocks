@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'gosu'
-require_relative 'zorder'
-
 # The cursor display state
 module CursorState
   NORMAL, HOVER, ACTIVE, HIDE = *0..3
@@ -14,9 +11,9 @@ class Cursor
 
   def initialize(window)
     @window = window
-    @img_normal = Gosu::Image.new('src/assets/images/cursor/normal.png')
-    @img_hover = Gosu::Image.new('src/assets/images/cursor/active.png')
-    @img_active = Gosu::Image.new('src/assets/images/cursor/active.png')
+    @img_normal = Gosu::Image.new('lib/assets/images/cursor/normal.png')
+    @img_hover = Gosu::Image.new('lib/assets/images/cursor/active.png')
+    @img_active = Gosu::Image.new('lib/assets/images/cursor/active.png')
     @visible = true
     @state = CursorState::NORMAL
   end
