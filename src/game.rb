@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'gosu'
 require 'chipmunk'
 require_relative 'components/constants'
@@ -5,11 +7,12 @@ require_relative 'components/zorder'
 require_relative 'components/cursor'
 require_relative 'components/ship'
 
+# The main game class
 class Game < Gosu::Window
   def initialize
-    super(Constants::WindowWidth, Constants::WindowHeight, false)
+    super(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT, false)
 
-    self.caption = Constants::AppName
+    self.caption = Constants::APP_NAME
 
     # Fixed dt to improve chipmunk performance
     @dt = 1.0 / 60.0
@@ -21,13 +24,20 @@ class Game < Gosu::Window
     @space = CP::Space.new
     @space.damping = 0.8
 
-    @ship = Ship.new(self, @space, {
-      :mass => 10.0,
-      :inertia => 15.0,
-      :shoot_interval => 300
-    })
+    @ship = Ship.new(
+      self,
+      @space,
+      {
+        mass: 10.0,
+        inertia: 15.0,
+        shoot_interval: 300
+      }
+    )
 
-    @ship.shape.body.p = CP::Vec2.new(Constants::WindowWidth / 2.0, Constants::WindowHeight / 2.0)
+    @ship.shape.body.p = CP::Vec2.new(
+      Constants::WINDOW_WIDTH / 2.0,
+      Constants::WINDOW_HEIGHT / 2.0
+    )
   end
 
   def update
@@ -37,16 +47,28 @@ class Game < Gosu::Window
   end
 
   def draw
-    @background.draw(0, 0, ZOrder::Background, Constants::WindowWidth.to_f / @background.width, Constants::WindowHeight.to_f / @background.height)
+    draw_background
     @cursor.draw
     @ship.draw
   end
 
+  private
+
+  def draw_background
+    @background.draw(
+      0,
+      0,
+      ZOrder::BACKGROUND,
+      Constants::WINDOW_WIDTH.to_f / @background.width,
+      Constants::WINDOW_HEIGHT.to_f / @background.height
+    )
+  end
+
   def update_cursor
-    if button_down?(Gosu::MS_LEFT)
-      @cursor.state = CursorState::Active
-    else
-      @cursor.state = CursorState::Normal
-    end
+    @cursor.state = if button_down?(Gosu::MS_LEFT)
+                      CursorState::ACTIVE
+                    else
+                      CursorState::NORMAL
+                    end
   end
 end

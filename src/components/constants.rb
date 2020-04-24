@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Constants
-  AppName = 'Rocks'
-  WindowWidth = 700
-  WindowHeight = 500
-  WindowPadding = 50
+  APP_NAME = 'Rocks'
+  WINDOW_WIDTH = 700
+  WINDOW_HEIGHT = 500
+  WINDOW_PADDING = 50
 end

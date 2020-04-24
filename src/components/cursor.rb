@@ -1,44 +1,46 @@
+# frozen_string_literal: true
+
 require 'gosu'
 require_relative 'zorder'
 
+# The cursor display state
 module CursorState
-  Normal, Hover, Active, Hide = *0..3
+  NORMAL, HOVER, ACTIVE, HIDE = *0..3
 end
 
+# The mouse cursor
 class Cursor
   attr_accessor :visible, :state
 
   def initialize(window)
     @window = window
-    @imgNormal = Gosu::Image.new('src/assets/images/cursor/normal.png')
-    @imgHover = Gosu::Image.new('src/assets/images/cursor/active.png')
-    @imgActive = Gosu::Image.new('src/assets/images/cursor/active.png')
+    @img_normal = Gosu::Image.new('src/assets/images/cursor/normal.png')
+    @img_hover = Gosu::Image.new('src/assets/images/cursor/active.png')
+    @img_active = Gosu::Image.new('src/assets/images/cursor/active.png')
     @visible = true
-    @state = CursorState::Normal
+    @state = CursorState::NORMAL
   end
 
   def draw
-    if @visible
-      current_img = get_current_img
+    return unless @visible
 
-      if current_img
-        current_img.draw(@window.mouse_x - current_img.width / 2, @window.mouse_y - current_img.height / 2, ZOrder::Cursor)
-      end
-    end
+    current_img&.draw(
+      @window.mouse_x - current_img.width / 2,
+      @window.mouse_y - current_img.height / 2,
+      ZOrder::CURSOR
+    )
   end
 
   private
 
-  def get_current_img
+  def current_img
     case @state
-    when CursorState::Normal
-      return @imgNormal
-    when CursorState::Hover
-      return @imgHover
-    when CursorState::Active
-      return @imgActive
-    else
-      return nil
+    when CursorState::NORMAL
+      @img_normal
+    when CursorState::HOVER
+      @img_hover
+    when CursorState::ACTIVE
+      @img_active
     end
   end
 end

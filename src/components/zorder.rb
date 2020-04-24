@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# The game's z-order layers
 module ZOrder
-  Background, Laser, Ship, Rock, UI, Cursor = *0..5
+  BACKGROUND, LASER, SHIP, ROCK, UI, CURSOR = *0..5
 end

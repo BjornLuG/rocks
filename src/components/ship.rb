@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require 'gosu'
 require 'chipmunk'
 require_relative 'sprite'
 require_relative 'zorder'
 require_relative 'constants'
 
+# The player ship
 class Ship < Sprite
   def initialize(window, space, specs)
     img = Gosu::Image.new('src/assets/images/ship.png')
@@ -11,7 +14,7 @@ class Ship < Sprite
     body = CP::Body.new(specs[:mass], specs[:inertia])
     @shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
 
-    super(img, @shape, ZOrder::Ship)
+    super(img, @shape, ZOrder::SHIP)
 
     space.add_body(body)
     space.add_shape(shape)
@@ -20,35 +23,51 @@ class Ship < Sprite
     @window = window
 
     # Cache last shoot time to calculate shoot interval
-    @lastShootMs = Gosu::milliseconds()
+    @last_shoot_ms = Gosu.milliseconds
   end
 
   def update
-    relative_x = @window.mouse_x - @shape.body.p.x
-    relative_y = @window.mouse_y - @shape.body.p.y
-
-    @shape.body.a = Math.atan2(relative_y, relative_x)
-
-    if @window.button_down?(Gosu::MS_LEFT) && can_shoot
-      @shape.body.apply_impulse(CP::Vec2.new(relative_x, relative_y).normalize_safe * -100.0, CP::Vec2::ZERO)
-    end
-
-    validate_move_area
+    update_position
+    update_rotation
+    shoot if @window.button_down?(Gosu::MS_LEFT) && can_shoot
   end
 
   private
 
   def can_shoot
-    if Gosu::milliseconds() - @lastShootMs > @specs[:shoot_interval]
-      @lastShootMs = Gosu::milliseconds()
-      return true
+    if Gosu.milliseconds - @last_shoot_ms > @specs[:shoot_interval]
+      @last_shoot_ms = Gosu.milliseconds
+      true
     else
-      return false
+      false
     end
   end
 
-  def validate_move_area
-    @shape.body.p.x = @shape.body.p.x.clamp(Constants::WindowPadding, @window.width - Constants::WindowPadding)
-    @shape.body.p.y = @shape.body.p.y.clamp(Constants::WindowPadding, @window.height - Constants::WindowPadding)
+  def update_position
+    @shape.body.p.x = @shape.body.p.x.clamp(
+      Constants::WINDOW_PADDING,
+      @window.width - Constants::WINDOW_PADDING
+    )
+
+    @shape.body.p.y = @shape.body.p.y.clamp(
+      Constants::WINDOW_PADDING,
+      @window.height - Constants::WINDOW_PADDING
+    )
+  end
+
+  def update_rotation
+    @shape.body.a = Math.atan2(
+      @window.mouse_y - @shape.body.p.y,
+      @window.mouse_x - @shape.body.p.x
+    )
+  end
+
+  def shoot
+    impulse = CP::Vec2.new(
+      @window.mouse_x - @shape.body.p.x,
+      @window.mouse_y - @shape.body.p.y
+    ).normalize_safe * -100.0
+
+    @shape.body.apply_impulse(impulse, CP::Vec2::ZERO)
   end
 end
