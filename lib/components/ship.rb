@@ -10,10 +10,7 @@ class Ship < Sprite
     body = CP::Body.new(specs[:mass], specs[:inertia])
     @shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
 
-    super(img, @shape, ZOrder::SHIP)
-
-    space.add_body(body)
-    space.add_shape(shape)
+    super(space, img, @shape, ZOrder::SHIP)
 
     @specs = specs
     @window = window

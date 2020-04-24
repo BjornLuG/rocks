@@ -4,10 +4,13 @@
 class Sprite
   attr_reader :shape
 
-  def initialize(img, shape, zorder)
+  def initialize(space, img, shape, zorder)
     @img = img
     @shape = shape
     @zorder = zorder
+
+    space.add_shape(shape)
+    space.add_body(shape.body)
   end
 
   def draw
