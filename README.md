@@ -15,7 +15,7 @@ $ bundle install --without dev
 ## Play
 
 ```bash
-$ ruby rocks.rb
+$ bundle exec ruby rocks.rb
 ```
 
 ## License

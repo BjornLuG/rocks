@@ -17,6 +17,30 @@ class Game < Gosu::Window
     @space = CP::Space.new
     @space.damping = 0.8
 
+    init_ship
+
+    @rock_pool = Pool.new(-> { Rock.new(@space) }, 20)
+
+    @prev_rock_spawn_ms = Gosu.milliseconds
+  end
+
+  def update
+    update_cursor
+    update_rock_spawn
+    @ship.update
+    @space.step(@dt)
+  end
+
+  def draw
+    draw_background
+    @cursor.draw
+    @ship.draw
+    @rock_pool.active_objects.each(&:draw)
+  end
+
+  private
+
+  def init_ship
     @ship = Ship.new(
       self,
       @space,
@@ -32,20 +56,6 @@ class Game < Gosu::Window
       Constants::WINDOW_HEIGHT / 2.0
     )
   end
-
-  def update
-    update_cursor
-    @ship.update
-    @space.step(@dt)
-  end
-
-  def draw
-    draw_background
-    @cursor.draw
-    @ship.draw
-  end
-
-  private
 
   def draw_background
     @background.draw(
@@ -63,5 +73,20 @@ class Game < Gosu::Window
                     else
                       CursorState::NORMAL
                     end
+  end
+
+  def update_rock_spawn
+    return unless Gosu.milliseconds - @prev_rock_spawn_ms > 1000
+
+    rock = @rock_pool.spawn
+
+    return if rock.nil?
+
+    rock.shape.body.p = CP::Vec2.new(
+      rand * Constants::WINDOW_WIDTH,
+      rand * Constants::WINDOW_HEIGHT
+    )
+
+    @prev_rock_spawn_ms = Gosu.milliseconds
   end
 end
