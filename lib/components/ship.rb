@@ -8,9 +8,9 @@ class Ship < Sprite
     img = Gosu::Image.new('lib/assets/images/ship.png')
     radius = [img.width, img.height].max / 2.0
     body = CP::Body.new(specs[:mass], specs[:inertia])
-    @shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
+    shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
 
-    super(space, img, @shape, ZOrder::SHIP)
+    super(space, img, shape, ZOrder::SHIP)
 
     @specs = specs
     @window = window
