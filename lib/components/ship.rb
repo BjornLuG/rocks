@@ -38,13 +38,13 @@ class Ship < Sprite
 
   def update_position
     @shape.body.p.x = @shape.body.p.x.clamp(
-      Constants::WINDOW_PADDING,
-      @window.width - Constants::WINDOW_PADDING
+      Constant::WINDOW_PADDING,
+      @window.width - Constant::WINDOW_PADDING
     )
 
     @shape.body.p.y = @shape.body.p.y.clamp(
-      Constants::WINDOW_PADDING,
-      @window.height - Constants::WINDOW_PADDING
+      Constant::WINDOW_PADDING,
+      @window.height - Constant::WINDOW_PADDING
     )
   end
 

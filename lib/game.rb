@@ -3,9 +3,9 @@
 # The main game class
 class Game < Gosu::Window
   def initialize
-    super(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT, false)
+    super(Constant::WINDOW_WIDTH, Constant::WINDOW_HEIGHT, false)
 
-    self.caption = Constants::APP_NAME
+    self.caption = Constant::APP_NAME
 
     # Fixed dt to improve chipmunk performance
     @dt = 1.0 / 60.0
@@ -52,8 +52,8 @@ class Game < Gosu::Window
     )
 
     @ship.shape.body.p = CP::Vec2.new(
-      Constants::WINDOW_WIDTH / 2.0,
-      Constants::WINDOW_HEIGHT / 2.0
+      Constant::WINDOW_WIDTH / 2.0,
+      Constant::WINDOW_HEIGHT / 2.0
     )
   end
 
@@ -62,8 +62,8 @@ class Game < Gosu::Window
       0,
       0,
       ZOrder::BACKGROUND,
-      Constants::WINDOW_WIDTH.to_f / @background.width,
-      Constants::WINDOW_HEIGHT.to_f / @background.height
+      Constant::WINDOW_WIDTH.to_f / @background.width,
+      Constant::WINDOW_HEIGHT.to_f / @background.height
     )
   end
 
@@ -83,8 +83,8 @@ class Game < Gosu::Window
     return if rock.nil?
 
     rock.shape.body.p = CP::Vec2.new(
-      rand * Constants::WINDOW_WIDTH,
-      rand * Constants::WINDOW_HEIGHT
+      rand * Constant::WINDOW_WIDTH,
+      rand * Constant::WINDOW_HEIGHT
     )
 
     @prev_rock_spawn_ms = Gosu.milliseconds

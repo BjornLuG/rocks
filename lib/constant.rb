@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Constants
+module Constant
   APP_NAME = 'Rocks'
   WINDOW_WIDTH = 700
   WINDOW_HEIGHT = 500
