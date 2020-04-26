@@ -46,7 +46,7 @@ class Rock < Sprite
 
     @shape.body.p = start_pos
 
-    @shape.body.apply_force(normalized_direction * 100.0, CP::Vec2::ZERO)
+    @shape.body.apply_force(normalized_direction * 100.0, random_rotation)
   end
 
   def new_rock_image(index)
@@ -108,5 +108,9 @@ class Rock < Sprite
       @window.width + @radius * 2,
       @window.height + @radius * 2
     ) - CP::Vec2.new(@radius, @radius)
+  end
+
+  def random_rotation
+    CP::Vec2.new((rand - 0.5) * @radius, (rand - 0.5) * @radius)
   end
 end
