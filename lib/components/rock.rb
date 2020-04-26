@@ -49,8 +49,23 @@ class Rock < Sprite
     @shape.body.apply_force(normalized_direction * 100.0, random_rotation)
   end
 
-  def new_rock_image(index)
-    @img = rock_image(index)
+  def change_rock(index = nil)
+    # Remove from space simulation first
+    remove_from_space
+
+    @img = index.nil? ? random_rock_image : rock_image(index)
+    radius = [@img.width, @img.height].max / 2.0
+
+    body = CP::Body.new(
+      radius,
+      CP.moment_for_circle(radius, 0, radius, CP::Vec2::ZERO)
+    )
+
+    @shape.body = body
+    @shape.set_radius!(radius)
+
+    # Return to space simulation
+    add_to_space
   end
 
   def pool_create

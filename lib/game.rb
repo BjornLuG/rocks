@@ -17,7 +17,7 @@ class Game < Gosu::Window
     @space = CP::Space.new
     @space.damping = 0.8
 
-    @rock_pool = Pool.new(-> { Rock.new(self, @space) }, 20)
+    @rock_pool = Pool.new(-> { Rock.new(self, @space, 0) }, 20)
 
     @prev_rock_spawn_ms = Gosu.milliseconds
 
@@ -100,6 +100,7 @@ class Game < Gosu::Window
 
     return if rock.nil?
 
+    rock.change_rock
     rock.target_ship(@ship.shape.body.p)
 
     @prev_rock_spawn_ms = Gosu.milliseconds
