@@ -1,5 +1,7 @@
 # rocks
 
+![CI](https://github.com/BjornLuG/rocks/workflows/CI/badge.svg)
+
 Uni programming project
 
 ## Install
