@@ -9,6 +9,7 @@ class Ship < Sprite
     radius = [img.width, img.height].max / 2.0
     body = CP::Body.new(specs[:mass], specs[:inertia])
     shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
+    shape.layers = CollisionLayer::SHIP
 
     super(space, img, shape, ZOrder::SHIP)
 

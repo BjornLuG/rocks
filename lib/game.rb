@@ -19,7 +19,7 @@ class Game < Gosu::Window
 
     init_ship
 
-    @rock_pool = Pool.new(-> { Rock.new(@space) }, 20)
+    @rock_pool = Pool.new(-> { Rock.new(self, @space) }, 20)
 
     @prev_rock_spawn_ms = Gosu.milliseconds
   end
@@ -29,6 +29,10 @@ class Game < Gosu::Window
     update_rock_spawn
     @ship.update
     @space.step(@dt)
+    @rock_pool.active_objects.each do |rock|
+      rock.update
+      @rock_pool.despawn(rock) if rock.has_exited
+    end
   end
 
   def draw
@@ -51,10 +55,7 @@ class Game < Gosu::Window
       }
     )
 
-    @ship.shape.body.p = CP::Vec2.new(
-      Constant::WINDOW_WIDTH / 2.0,
-      Constant::WINDOW_HEIGHT / 2.0
-    )
+    @ship.shape.body.p = CP::Vec2.new(width / 2.0, height / 2.0)
   end
 
   def draw_background
@@ -62,8 +63,8 @@ class Game < Gosu::Window
       0,
       0,
       ZOrder::BACKGROUND,
-      Constant::WINDOW_WIDTH.to_f / @background.width,
-      Constant::WINDOW_HEIGHT.to_f / @background.height
+      width.to_f / @background.width,
+      height.to_f / @background.height
     )
   end
 
@@ -82,10 +83,7 @@ class Game < Gosu::Window
 
     return if rock.nil?
 
-    rock.shape.body.p = CP::Vec2.new(
-      rand * Constant::WINDOW_WIDTH,
-      rand * Constant::WINDOW_HEIGHT
-    )
+    rock.target_ship(@ship.shape.body.p)
 
     @prev_rock_spawn_ms = Gosu.milliseconds
   end
