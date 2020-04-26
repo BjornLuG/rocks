@@ -18,6 +18,7 @@ class Game < Gosu::Window
     @space.damping = 0.8
 
     @rock_pool = Pool.new(-> { Rock.new(self, @space, 0) }, 20)
+    @laser_pool = Pool.new(-> { Laser.new(self, @space, { mass: 1.0 }) }, 20)
 
     @prev_rock_spawn_ms = Gosu.milliseconds
 
@@ -28,6 +29,7 @@ class Game < Gosu::Window
     init_ship
 
     handle_rock_ship_collision
+    handle_laser_rock_collision
   end
 
   def update
@@ -43,6 +45,11 @@ class Game < Gosu::Window
       @rock_pool.despawn(rock) if rock.has_exited
     end
 
+    @laser_pool.active_objects.each do |laser|
+      laser.update
+      @laser_pool.despawn(laser) if laser.has_exited
+    end
+
     late_update
   end
 
@@ -51,6 +58,7 @@ class Game < Gosu::Window
     @cursor.draw
     @ship.draw
     @rock_pool.active_objects.each(&:draw)
+    @laser_pool.active_objects.each(&:draw)
   end
 
   private
@@ -59,6 +67,7 @@ class Game < Gosu::Window
     @ship = Ship.new(
       self,
       @space,
+      @laser_pool,
       {
         health: 3,
         mass: 10.0,
@@ -115,6 +124,15 @@ class Game < Gosu::Window
       })
 
       end_game if @ship.dead?
+    end
+  end
+
+  def handle_laser_rock_collision
+    @space.add_collision_func(:laser, :rock) do |laser_shape, rock_shape|
+      @late_update_stack.push(lambda {
+        @rock_pool.despawn(rock_shape.object)
+        @laser_pool.despawn(laser_shape.object)
+      })
     end
   end
 

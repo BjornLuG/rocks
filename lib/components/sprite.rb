@@ -34,4 +34,10 @@ class Sprite
     @space.remove_shape(@shape)
     @space.remove_body(@shape.body)
   end
+
+  def reset_shape_physics
+    @shape.body.reset_forces
+    @shape.body.v = CP::Vec2::ZERO
+    @shape.body.w = 0.0
+  end
 end

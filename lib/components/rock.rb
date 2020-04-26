@@ -19,8 +19,8 @@ class Rock < Sprite
     shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
     shape.collision_type = :rock
     shape.layers = CollisionLayer::ROCK
-    # Prevent colissions between other rocks
-    shape.group = 1
+    # Prevent collisions between other rocks
+    shape.group = CollisionLayer::ROCK
     shape.object = self
 
     super(space, img, shape, ZOrder::ROCK)
@@ -80,7 +80,7 @@ class Rock < Sprite
 
   def pool_despawn
     remove_from_space
-    @shape.body.reset_forces
+    reset_shape_physics
     @active = false
     @has_entered = false
     @has_exited = false

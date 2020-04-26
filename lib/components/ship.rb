@@ -6,7 +6,7 @@ require_relative 'sprite'
 class Ship < Sprite
   attr_reader :health
 
-  def initialize(window, space, specs)
+  def initialize(window, space, laser_pool, specs)
     img = Gosu::Image.new('lib/assets/images/ship.png')
     radius = [img.width, img.height].max / 2.0
     body = CP::Body.new(specs[:mass], specs[:inertia])
@@ -17,8 +17,9 @@ class Ship < Sprite
 
     super(space, img, shape, ZOrder::SHIP)
 
-    @specs = specs
     @window = window
+    @laser_pool = laser_pool
+    @specs = specs
 
     @health = specs[:health]
 
@@ -71,11 +72,19 @@ class Ship < Sprite
   end
 
   def shoot
-    impulse = CP::Vec2.new(
+    laser = @laser_pool.spawn
+
+    return if laser.nil?
+
+    normalized_direction = CP::Vec2.new(
       @window.mouse_x - @shape.body.p.x,
       @window.mouse_y - @shape.body.p.y
-    ).normalize_safe * -100.0
+    ).normalize_safe
+
+    impulse = normalized_direction * -100.0
 
     @shape.body.apply_impulse(impulse, CP::Vec2::ZERO)
+
+    laser.target_direction(@shape.body.p, normalized_direction)
   end
 end
