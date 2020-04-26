@@ -4,17 +4,23 @@ require_relative 'sprite'
 
 # The player ship
 class Ship < Sprite
+  attr_reader :health
+
   def initialize(window, space, specs)
     img = Gosu::Image.new('lib/assets/images/ship.png')
     radius = [img.width, img.height].max / 2.0
     body = CP::Body.new(specs[:mass], specs[:inertia])
     shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
+    shape.collision_type = :ship
     shape.layers = CollisionLayer::SHIP
+    shape.object = self
 
     super(space, img, shape, ZOrder::SHIP)
 
     @specs = specs
     @window = window
+
+    @health = specs[:health]
 
     # Cache last shoot time to calculate shoot interval
     @last_shoot_ms = Gosu.milliseconds
@@ -24,6 +30,14 @@ class Ship < Sprite
     update_position
     update_rotation
     shoot if @window.button_down?(Gosu::MS_LEFT) && can_shoot
+  end
+
+  def take_damage
+    @health -= 1
+  end
+
+  def dead?
+    @health <= 0
   end
 
   private

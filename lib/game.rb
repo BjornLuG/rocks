@@ -17,22 +17,33 @@ class Game < Gosu::Window
     @space = CP::Space.new
     @space.damping = 0.8
 
-    init_ship
-
     @rock_pool = Pool.new(-> { Rock.new(self, @space) }, 20)
 
     @prev_rock_spawn_ms = Gosu.milliseconds
+
+    # Used for Chipmunk since you cannot remove shapes/bodies during a step.
+    # This will be called after the step
+    @late_update_stack = []
+
+    init_ship
+
+    handle_rock_ship_collision
   end
 
   def update
     update_cursor
     update_rock_spawn
+
     @ship.update
+
     @space.step(@dt)
+
     @rock_pool.active_objects.each do |rock|
       rock.update
       @rock_pool.despawn(rock) if rock.has_exited
     end
+
+    late_update
   end
 
   def draw
@@ -49,6 +60,7 @@ class Game < Gosu::Window
       self,
       @space,
       {
+        health: 3,
         mass: 10.0,
         inertia: 15.0,
         shoot_interval: 300
@@ -66,6 +78,11 @@ class Game < Gosu::Window
       width.to_f / @background.width,
       height.to_f / @background.height
     )
+  end
+
+  def late_update
+    @late_update_stack.each(&:call)
+    @late_update_stack.clear
   end
 
   def update_cursor
@@ -86,5 +103,21 @@ class Game < Gosu::Window
     rock.target_ship(@ship.shape.body.p)
 
     @prev_rock_spawn_ms = Gosu.milliseconds
+  end
+
+  def handle_rock_ship_collision
+    @space.add_collision_func(:rock, :ship) do |rock_shape, _ship_shape|
+      @ship.take_damage
+
+      @late_update_stack.push(lambda {
+        @rock_pool.despawn(rock_shape.object)
+      })
+
+      end_game if @ship.dead?
+    end
+  end
+
+  def end_game
+    puts 'Game over'
   end
 end

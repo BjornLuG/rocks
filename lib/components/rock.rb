@@ -17,9 +17,11 @@ class Rock < Sprite
       CP.moment_for_circle(radius, 0, radius, CP::Vec2::ZERO)
     )
     shape = CP::Shape::Circle.new(body, radius, CP::Vec2::ZERO)
+    shape.collision_type = :rock
     shape.layers = CollisionLayer::ROCK
     # Prevent colissions between other rocks
     shape.group = 1
+    shape.object = self
 
     super(space, img, shape, ZOrder::ROCK)
 
