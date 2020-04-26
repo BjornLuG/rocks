@@ -19,7 +19,7 @@ jobs:
       with:
         path: ./.ruby-version
     - name: Set up Ruby
-      uses: actions/setup-ruby@v1
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ steps.rubyver.outputs.content }}
     - name: Build and lint with Rake
