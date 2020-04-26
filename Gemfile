@@ -8,5 +8,6 @@ gem 'chipmunk', '~> 6.1', '>= 6.1.3.4'
 gem 'gosu', '~> 0.15.1'
 
 group :dev do
+  gem 'rake', '~> 13.0', '>= 13.0.1'
   gem 'rubocop', '~> 0.82.0', require: false
 end
