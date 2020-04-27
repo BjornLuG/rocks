@@ -23,6 +23,9 @@ $ bundle install
 $ bundle install --without dev
 ```
 
+> If Bundler fails with `Can't find gem bundler (>= 0.a) with executable bundle (Gem::GemNotFoundException)`,
+try updating bundler with `gem install bundler`. [More info](https://bundler.io/blog/2019/01/04/an-update-on-the-bundler-2-release.html).
+
 ## Play
 
 ```bash
