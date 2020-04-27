@@ -2,42 +2,50 @@
 
 # Base class for objects that take part in physics
 class Sprite
-  attr_accessor :img, :shape, :active
+  attr_accessor :img, :zorder, :pos, :rot, :collider_radius, :velocity,
+                :rot_velocity, :active
 
-  def initialize(space, img, shape, zorder)
-    @space = space
+  def initialize(img, zorder)
     @img = img
-    @shape = shape
     @zorder = zorder
+    # Vector 2 position
+    @pos = Vector[0.0, 0.0]
+    # Rotation in radians
+    @rot = 0.0
+    @collider_radius = [@img.width, @img.height].max / 2.0
+    @velocity = Vector[0.0, 0.0]
+    @rot_velocity = 0.0
     @active = true
+  end
 
-    add_to_space
+  def update(dt)
+    @pos += @velocity * dt / 1000
+    @rot += @rot_velocity * dt / 1000
   end
 
   def draw
     return unless @active
 
     @img.draw_rot(
-      @shape.body.p.x,
-      @shape.body.p.y,
+      @pos[0],
+      @pos[1],
       @zorder,
-      @shape.body.a.radians_to_gosu
+      @rot.radians_to_gosu
     )
   end
 
-  def add_to_space
-    @space.add_shape(@shape)
-    @space.add_body(@shape.body)
-  end
+  def collide?(other_sprite)
+    x_dist = (other_sprite.pos[0] - @pos[0]).abs
+    y_dist = (other_sprite.pos[1] - @pos[1]).abs
+    collide_dist = @collider_radius + other_sprite.collider_radius
 
-  def remove_from_space
-    @space.remove_shape(@shape)
-    @space.remove_body(@shape.body)
-  end
+    # Preliminary check if x, y distance is more than collide.
+    # This is much efficient to run than below.
+    return false if x_dist >= collide_dist || y_dist >= collide_dist
 
-  def reset_shape_physics
-    @shape.body.reset_forces
-    @shape.body.v = CP::Vec2::ZERO
-    @shape.body.w = 0.0
+    # Here we compare by power of 2 because square root is expensive.
+    square_dist = x_dist**2 + y_dist**2
+    square_collision_dist = collide_dist**2
+    square_dist < square_collision_dist
   end
 end

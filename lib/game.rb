@@ -7,50 +7,42 @@ class Game < Gosu::Window
 
     self.caption = Constant::APP_NAME
 
-    # Fixed dt to improve chipmunk performance
-    @dt = 1.0 / 60.0
-
     @background = Gosu::Image.new('lib/assets/images/background.png')
 
     @cursor = Cursor.new(self)
 
-    @space = CP::Space.new
-    @space.damping = 0.8
+    @rock_pool = Pool.new(-> { Rock.new(self, 0) }, 20)
+    @laser_pool = Pool.new(-> { Laser.new }, 20)
 
-    @rock_pool = Pool.new(-> { Rock.new(self, @space, 0) }, 20)
-    @laser_pool = Pool.new(-> { Laser.new(self, @space, { mass: 1.0 }) }, 20)
-
+    # To keep track of rock spawn
     @prev_rock_spawn_ms = Gosu.milliseconds
 
-    # Used for Chipmunk since you cannot remove shapes/bodies during a step.
-    # This will be called after the step
-    @late_update_stack = []
+    # Update delta time
+    @prev_ms = Gosu.milliseconds
+    @dt = 0
 
     init_ship
-
-    handle_rock_ship_collision
-    handle_laser_rock_collision
   end
 
   def update
+    update_dt
     update_cursor
     update_rock_spawn
 
-    @ship.update
+    check_laser_rock_collision
+    check_ship_rock_collision
 
-    @space.step(@dt)
+    @ship.update(@dt)
 
     @rock_pool.active_objects.each do |rock|
-      rock.update
+      rock.update(@dt)
       @rock_pool.despawn(rock) if rock.has_exited
     end
 
     @laser_pool.active_objects.each do |laser|
-      laser.update
+      laser.update(@dt)
       @laser_pool.despawn(laser) if laser.has_exited
     end
-
-    late_update
   end
 
   def draw
@@ -66,17 +58,20 @@ class Game < Gosu::Window
   def init_ship
     @ship = Ship.new(
       self,
-      @space,
       @laser_pool,
       {
         health: 3,
-        mass: 10.0,
-        inertia: 15.0,
-        shoot_interval: 300
+        shoot_interval: 200
       }
     )
 
-    @ship.shape.body.p = CP::Vec2.new(width / 2.0, height / 2.0)
+    @ship.pos = Vector[width / 2.0, height - @ship.collider_radius]
+    @ship.rot = -Math::PI / 2.0
+  end
+
+  def update_dt
+    @dt = Gosu.milliseconds - @prev_ms
+    @prev_ms = Gosu.milliseconds
   end
 
   def draw_background
@@ -87,11 +82,6 @@ class Game < Gosu::Window
       width.to_f / @background.width,
       height.to_f / @background.height
     )
-  end
-
-  def late_update
-    @late_update_stack.each(&:call)
-    @late_update_stack.clear
   end
 
   def update_cursor
@@ -110,29 +100,33 @@ class Game < Gosu::Window
     return if rock.nil?
 
     rock.change_rock
-    rock.target_ship(@ship.shape.body.p)
+    rock.target_ship
 
     @prev_rock_spawn_ms = Gosu.milliseconds
   end
 
-  def handle_rock_ship_collision
-    @space.add_collision_func(:rock, :ship) do |rock_shape, _ship_shape|
-      @ship.take_damage
+  def check_laser_rock_collision
+    # O(n^2) but it's simpler to implement, for now
+    @laser_pool.active_objects.each do |laser|
+      @rock_pool.active_objects.each do |rock|
+        next unless laser.collide?(rock)
 
-      @late_update_stack.push(lambda {
-        @rock_pool.despawn(rock_shape.object)
-      })
+        @laser_pool.despawn(laser)
+        @rock_pool.despawn(rock)
 
-      end_game if @ship.dead?
+        # Add score
+      end
     end
   end
 
-  def handle_laser_rock_collision
-    @space.add_collision_func(:laser, :rock) do |laser_shape, rock_shape|
-      @late_update_stack.push(lambda {
-        @rock_pool.despawn(rock_shape.object)
-        @laser_pool.despawn(laser_shape.object)
-      })
+  def check_ship_rock_collision
+    @rock_pool.active_objects.each do |rock|
+      next unless rock.collide?(@ship)
+
+      @rock_pool.despawn(rock)
+      @ship.take_damage
+
+      end_game if @ship.dead?
     end
   end
 
