@@ -2,6 +2,8 @@
 
 # UI Button class
 class Button
+  attr_reader :rect_width, :rect_height, :bordered_width, :bordered_height
+
   def initialize(
     window,
     text,
@@ -36,7 +38,7 @@ class Button
     @rect_width = 0
     @rect_height = 0
     @bordered_width = 0
-    @border_height = 0
+    @bordered_height = 0
     # Top left corner properties with account to relative x,y and border
     @anchor_x = 0
     @anchor_y = 0
@@ -47,13 +49,13 @@ class Button
   end
 
   def button_up(id)
-    @button_click_up = id == Gosu::MS_LEFT
+    @button_click_up = mouse_in_rect? && id == Gosu::MS_LEFT
   end
 
   def update
     update_rect_properties
 
-    @on_click.call if @button_click_up && mouse_in_rect?
+    @on_click.call if @button_click_up
   end
 
   def draw

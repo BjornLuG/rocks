@@ -4,6 +4,8 @@ require_relative 'scene'
 
 # The gameplay scene
 class PlayScene < Scene
+  attr_accessor :score, :paused
+
   def initialize(window)
     super(window)
 
@@ -15,55 +17,57 @@ class PlayScene < Scene
 
     @game_ended = false
 
-    @menu_button = Button.new(
-      @window,
-      'Main Menu',
-      Constant::FONT_SM,
-      @window.width / 2.0,
-      @window.height * 2 / 3.0,
-      ZOrder::UI,
-      -> { @window.go_to_scene(MenuScene) },
-      0.5,
-      0.5,
-      5
-    )
+    @score = 0
+    @paused = false
+
+    @current_ui_scene = PlayUIMainScene.new(@window, self)
 
     init_ship
   end
 
+  def button_down(id)
+    if @current_ui_scene.respond_to? :button_down
+      @current_ui_scene.button_down(id)
+    end
+  end
+
   def button_up(id)
-    @menu_button.button_up(id)
+    @current_ui_scene.button_up(id) if @current_ui_scene.respond_to? :button_up
   end
 
   def update(dt)
-    if @game_ended
-      @menu_button.update
-    else
-      update_rock_spawn
+    @current_ui_scene.update if @current_ui_scene.respond_to? :update
 
-      check_laser_rock_collision
-      check_ship_rock_collision
+    return if @paused || @game_ended
 
-      @ship.update(dt)
+    update_rock_spawn
 
-      @rock_pool.active_objects.each do |rock|
-        rock.update(dt)
-        @rock_pool.despawn(rock) if rock.has_exited
-      end
+    check_laser_rock_collision
+    check_ship_rock_collision
 
-      @laser_pool.active_objects.each do |laser|
-        laser.update(dt)
-        @laser_pool.despawn(laser) if laser.has_exited
-      end
+    @ship.update(dt)
+
+    @rock_pool.active_objects.each do |rock|
+      rock.update(dt)
+      @rock_pool.despawn(rock) if rock.has_exited
+    end
+
+    @laser_pool.active_objects.each do |laser|
+      laser.update(dt)
+      @laser_pool.despawn(laser) if laser.has_exited
     end
   end
 
   def draw
-    @menu_button.draw if @game_ended
+    @current_ui_scene.draw if @current_ui_scene.respond_to? :draw
 
     @ship.draw
     @rock_pool.active_objects.each(&:draw)
     @laser_pool.active_objects.each(&:draw)
+  end
+
+  def go_to_ui_scene(scene_class)
+    @current_ui_scene = scene_class.new(@window, self)
   end
 
   private
@@ -126,6 +130,6 @@ class PlayScene < Scene
 
   def end_game
     @game_ended = true
-    puts 'Game over'
+    go_to_ui_scene(PlayUIEndScene)
   end
 end
