@@ -4,7 +4,7 @@ require_relative 'scene'
 
 # The gameplay scene
 class PlayScene < Scene
-  attr_accessor :score, :paused
+  attr_accessor :score, :paused, :ship
 
   def initialize(window)
     super(window)
@@ -113,6 +113,7 @@ class PlayScene < Scene
         @rock_pool.despawn(rock)
 
         # Add score
+        @score += 1
       end
     end
   end

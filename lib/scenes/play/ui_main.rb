@@ -13,8 +13,8 @@ class PlayUIMainScene < Scene
       @window,
       'Pause',
       Constant::FONT_SM,
-      @window.width,
-      0,
+      @window.width - 10,
+      10,
       ZOrder::UI,
       lambda {
         @play_scene.paused = true
@@ -24,6 +24,8 @@ class PlayUIMainScene < Scene
       0,
       5
     )
+
+    @health_img = Gosu::Image.new('lib/assets/images/health.png')
   end
 
   def button_up(id)
@@ -40,11 +42,18 @@ class PlayUIMainScene < Scene
   end
 
   def draw
+    # Draw health
+    cumulative_pos_x = 0
+    (1..@play_scene.ship.health).each do
+      @health_img.draw(cumulative_pos_x, 10, ZOrder::UI)
+      cumulative_pos_x += @health_img.width + 5
+    end
+
     # Draw score
     Constant::FONT_MD.draw_text_rel(
       @play_scene.score.to_s,
-      0,
-      0,
+      10,
+      @health_img.height + 20,
       ZOrder::UI,
       0,
       0
