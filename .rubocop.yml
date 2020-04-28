@@ -13,5 +13,11 @@ Metrics/ClassLength:
 Metrics/MethodLength:
   Enabled: false
 
+Metrics/ParameterLists:
+  Enabled: false
+
 Naming/MethodParameterName:
+  Enabled: false
+
+Style/GuardClause:
   Enabled: false

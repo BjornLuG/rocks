@@ -11,63 +11,38 @@ class Game < Gosu::Window
 
     @cursor = Cursor.new(self)
 
-    @rock_pool = Pool.new(-> { Rock.new(self, 0) }, 20)
-    @laser_pool = Pool.new(-> { Laser.new }, 20)
-
-    # To keep track of rock spawn
-    @prev_rock_spawn_ms = Gosu.milliseconds
-
     # Update delta time
     @prev_ms = Gosu.milliseconds
     @dt = 0
 
-    init_ship
+    @current_scene = MenuScene.new(self)
+  end
+
+  def button_down(id)
+    @current_scene.button_down(id) if @current_scene.respond_to? :button_down
+  end
+
+  def button_up(id)
+    @current_scene.button_up(id) if @current_scene.respond_to? :button_up
   end
 
   def update
     update_dt
     update_cursor
-    update_rock_spawn
-
-    check_laser_rock_collision
-    check_ship_rock_collision
-
-    @ship.update(@dt)
-
-    @rock_pool.active_objects.each do |rock|
-      rock.update(@dt)
-      @rock_pool.despawn(rock) if rock.has_exited
-    end
-
-    @laser_pool.active_objects.each do |laser|
-      laser.update(@dt)
-      @laser_pool.despawn(laser) if laser.has_exited
-    end
+    @current_scene.update(@dt) if @current_scene.respond_to? :update
   end
 
   def draw
     draw_background
     @cursor.draw
-    @ship.draw
-    @rock_pool.active_objects.each(&:draw)
-    @laser_pool.active_objects.each(&:draw)
+    @current_scene.draw if @current_scene.respond_to? :draw
+  end
+
+  def go_to_scene(scene_class)
+    @current_scene = scene_class.new(self)
   end
 
   private
-
-  def init_ship
-    @ship = Ship.new(
-      self,
-      @laser_pool,
-      {
-        health: 3,
-        shoot_interval: 200
-      }
-    )
-
-    @ship.pos = Vector[width / 2.0, height - @ship.collider_radius]
-    @ship.rot = -Math::PI / 2.0
-  end
 
   def update_dt
     @dt = Gosu.milliseconds - @prev_ms
@@ -85,52 +60,11 @@ class Game < Gosu::Window
   end
 
   def update_cursor
-    @cursor.state = if button_down?(Gosu::MS_LEFT)
-                      CursorState::ACTIVE
-                    else
-                      CursorState::NORMAL
-                    end
-  end
-
-  def update_rock_spawn
-    return unless Gosu.milliseconds - @prev_rock_spawn_ms > 1000
-
-    rock = @rock_pool.spawn
-
-    return if rock.nil?
-
-    rock.change_rock
-    rock.target_ship
-
-    @prev_rock_spawn_ms = Gosu.milliseconds
-  end
-
-  def check_laser_rock_collision
-    # O(n^2) but it's simpler to implement, for now
-    @laser_pool.active_objects.each do |laser|
-      @rock_pool.active_objects.each do |rock|
-        next unless laser.collide?(rock)
-
-        @laser_pool.despawn(laser)
-        @rock_pool.despawn(rock)
-
-        # Add score
+    @cursor.state =
+      if button_down?(Gosu::MS_LEFT)
+        CursorState::ACTIVE
+      else
+        CursorState::NORMAL
       end
-    end
-  end
-
-  def check_ship_rock_collision
-    @rock_pool.active_objects.each do |rock|
-      next unless rock.collide?(@ship)
-
-      @rock_pool.despawn(rock)
-      @ship.take_damage
-
-      end_game if @ship.dead?
-    end
-  end
-
-  def end_game
-    puts 'Game over'
   end
 end

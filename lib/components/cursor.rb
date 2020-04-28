@@ -19,13 +19,13 @@ class Cursor
   end
 
   def draw
-    return unless @visible
-
-    current_img&.draw(
-      @window.mouse_x - current_img.width / 2,
-      @window.mouse_y - current_img.height / 2,
-      ZOrder::CURSOR
-    )
+    if @visible && in_window?
+      current_img&.draw(
+        @window.mouse_x - current_img.width / 2,
+        @window.mouse_y - current_img.height / 2,
+        ZOrder::CURSOR
+      )
+    end
   end
 
   private
@@ -39,5 +39,16 @@ class Cursor
     when CursorState::ACTIVE
       @img_active
     end
+  end
+
+  def in_window?
+    Util.point_in_rect?(
+      @window.mouse_x,
+      @window.mouse_y,
+      0,
+      0,
+      @window.width,
+      @window.height
+    )
   end
 end

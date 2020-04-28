@@ -33,11 +33,12 @@ class Pool
     end
 
     if found_item.nil?
-      # Bail if not (expandable or forced)
-      return unless @expandable || force
-
-      # Otherwise we create a new item
-      found_item = create_item
+      # Check can create more
+      if @expandable || force
+        found_item = create_item
+      else
+        return
+      end
     end
 
     found_item.active = true
