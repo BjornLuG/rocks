@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # Editor
 *.code-workspace
+
+# Game data
+.data

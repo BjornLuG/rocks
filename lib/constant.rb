@@ -10,4 +10,5 @@ module Constant
   FONT_MD = Gosu::Font.new(56, { name: FONT_NAME })
   FONT_LG = Gosu::Font.new(80, { name: FONT_NAME })
   FONT_XL = Gosu::Font.new(120, { name: FONT_NAME })
+  HIGHSCORE_FILE_NAME = '.data/highscore.json'
 end

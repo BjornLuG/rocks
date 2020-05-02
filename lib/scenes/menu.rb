@@ -12,21 +12,36 @@ class MenuScene < Scene
       'Play',
       Constant::FONT_SM,
       @window.width / 2.0,
-      @window.height * 2 / 3.0,
+      @window.height / 2.0,
       ZOrder::UI,
       -> { @window.go_to_scene(PlayScene) },
       0.5,
+      0,
+      5
+    )
+
+    @highscore_button = Button.new(
+      @window,
+      'Highscore',
+      Constant::FONT_SM,
+      @window.width / 2.0,
+      @window.height / 2.0 + @play_button.bordered_height + 10,
+      ZOrder::UI,
+      -> { @window.go_to_scene(HighscoreScene) },
       0.5,
+      0,
       5
     )
   end
 
   def button_up(id)
     @play_button.button_up(id)
+    @highscore_button.button_up(id)
   end
 
   def update(_dt)
     @play_button.update
+    @highscore_button.update
   end
 
   def draw
@@ -40,7 +55,7 @@ class MenuScene < Scene
       0.5
     )
 
-    # Draw play button
     @play_button.draw
+    @highscore_button.draw
   end
 end
