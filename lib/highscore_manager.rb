@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Saves the top 10 highscore in a hash
 class HighscoreManager
   attr_reader :score_list
@@ -7,26 +9,28 @@ class HighscoreManager
   end
 
   def highscore?(score)
-    score_list_insert_index(score) < 10
+    score.positive? && score_list_insert_index(score) < 10
   end
 
   # Add highscore and saves result
   def add_highscore(name, score)
+    return if score <= 0
+
     insert_index = score_list_insert_index(score)
 
     return if insert_index >= 10
 
     @score_list = @score_list
-      .insert(
-        insert_index,
-        # Return this this sort of hash because JSON.parse will return
-        # something like this too (for consistency)
-        {
-          'name' => name,
-          'score' => score
-        }
-      )
-      .slice(0, 10)
+                  .insert(
+                    insert_index,
+                    # Return this this sort of hash because JSON.parse will
+                    # return something like this too (for consistency)
+                    {
+                      'name' => name,
+                      'score' => score
+                    }
+                  )
+                  .slice(0, 10)
 
     save_score_list
   end
@@ -56,9 +60,7 @@ class HighscoreManager
   end
 
   def read_score_list
-    unless File.file?(Constant::HIGHSCORE_FILE_NAME)
-      create_file
-    end
+    create_file unless File.file?(Constant::HIGHSCORE_FILE_NAME)
 
     data = File.read(Constant::HIGHSCORE_FILE_NAME)
 
@@ -69,7 +71,7 @@ class HighscoreManager
       parsed_data = JSON.parse(data)
 
       # If data is not array (tampered), set empty array
-      @score_list = parsed_data.kind_of?(Array) ? parsed_data : []
+      @score_list = parsed_data.is_a?(Array) ? parsed_data : []
     end
   end
 end

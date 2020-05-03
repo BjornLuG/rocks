@@ -42,7 +42,7 @@ class HighscoreScene < Scene
       1
     )
 
-    next_y = draw_scores(100)
+    draw_scores(100)
 
     # Draw play button
     @menu_button.draw
