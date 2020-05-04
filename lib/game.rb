@@ -2,6 +2,8 @@
 
 # The main game class
 class Game < Gosu::Window
+  attr_reader :game_music, :menu_music
+
   def initialize
     super(Constant::WINDOW_WIDTH, Constant::WINDOW_HEIGHT, false)
 
@@ -9,7 +11,15 @@ class Game < Gosu::Window
 
     @background = Gosu::Image.new('lib/assets/images/background.png')
 
+    # Mouse cursor image
     @cursor = Cursor.new(self)
+
+    # Setup music
+    @game_music = Gosu::Song.new('lib/assets/sound/music/game.mp3')
+    @menu_music = Gosu::Song.new('lib/assets/sound/music/menu.mp3')
+
+    # Reduce game music's volume, because it's loud
+    @game_music.volume = 0.25
 
     # Update delta time
     @prev_ms = Gosu.milliseconds

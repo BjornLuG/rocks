@@ -23,6 +23,8 @@ class PlayScene < Scene
     @current_ui_scene = PlayUIMainScene.new(@window, self)
 
     init_ship
+
+    @window.game_music.play(true)
   end
 
   def button_down(id)
@@ -131,6 +133,7 @@ class PlayScene < Scene
 
   def end_game
     @game_ended = true
+    @window.game_music.pause
     go_to_ui_scene(PlayUIEndScene)
   end
 end

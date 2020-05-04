@@ -32,6 +32,8 @@ class MenuScene < Scene
       0,
       5
     )
+
+    @window.menu_music.play(true)
   end
 
   def button_up(id)

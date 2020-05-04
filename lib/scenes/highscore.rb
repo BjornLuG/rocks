@@ -21,6 +21,8 @@ class HighscoreScene < Scene
     )
 
     @highscore_manager = HighscoreManager.new
+
+    @window.menu_music.play(true)
   end
 
   def button_up(id)
