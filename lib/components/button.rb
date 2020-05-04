@@ -44,12 +44,14 @@ class Button
     @anchor_y = 0
 
     @button_click_up = false
+    @click_sfx = Gosu::Sample.new('lib/assets/sound/sfx/click.ogg')
 
     update_rect_properties
   end
 
   def button_up(id)
     @button_click_up = mouse_in_rect? && id == Gosu::MS_LEFT
+    @click_sfx.play if @button_click_up
   end
 
   def update

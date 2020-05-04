@@ -17,6 +17,9 @@ class Ship < Sprite
 
     # Cache last shoot time to calculate shoot interval
     @last_shoot_ms = Gosu.milliseconds
+
+    @shoot_sfx = Gosu::Sample.new('lib/assets/sound/sfx/shoot.ogg')
+    @hurt_sfx = Gosu::Sample.new('lib/assets/sound/sfx/hurt.ogg')
   end
 
   def update(dt)
@@ -27,6 +30,7 @@ class Ship < Sprite
 
   def take_damage
     @health -= 1
+    @hurt_sfx.play
   end
 
   def dead?
@@ -49,6 +53,11 @@ class Ship < Sprite
   end
 
   def shoot
-    @laser_pool.spawn&.shoot(@pos)
+    laser = @laser_pool.spawn
+
+    return if laser.nil?
+
+    laser.shoot(@pos)
+    @shoot_sfx.play(0.6)
   end
 end

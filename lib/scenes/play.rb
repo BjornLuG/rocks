@@ -20,6 +20,9 @@ class PlayScene < Scene
     @score = 0
     @paused = false
 
+    # Rock collide sound
+    @crash_sfx = Gosu::Sample.new('lib/assets/sound/sfx/crash.ogg')
+
     @current_ui_scene = PlayUIMainScene.new(@window, self)
 
     init_ship
@@ -63,7 +66,8 @@ class PlayScene < Scene
   def draw
     @current_ui_scene.draw if @current_ui_scene.respond_to? :draw
 
-    @ship.draw
+    @ship.draw unless @game_ended
+
     @rock_pool.active_objects.each(&:draw)
     @laser_pool.active_objects.each(&:draw)
   end
@@ -113,6 +117,8 @@ class PlayScene < Scene
 
         @laser_pool.despawn(laser)
         @rock_pool.despawn(rock)
+
+        @crash_sfx.play(0.6)
 
         # Add score
         @score += 1
