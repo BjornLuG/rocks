@@ -29,8 +29,8 @@ class Rock < Sprite
   # Targets a ship from a random position on window top edge
   def target_ship
     @pos = Vector[rand(@window.width), -@collider_radius]
-    @velocity = Vector[0, 100]
-    @rot_velocity = rand(0.5) - 0.25
+    @velocity = Vector[0, 1500] / @collider_radius
+    @rot_velocity = (rand - 0.5) * 20 / @collider_radius
   end
 
   def change_rock(index = nil)
