@@ -16,7 +16,7 @@ class HighscoreScene < Scene
       ZOrder::UI,
       -> { @window.go_to_scene(MenuScene) },
       0.5,
-      1,
+      0,
       5
     )
 
