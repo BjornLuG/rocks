@@ -38,9 +38,9 @@ $ bundle exec rake start
 
 ## Attributions
 
-Game images: https://kenney.nl/assets/space-shooter-redux
-Menu music: https://www.dl-sounds.com/royalty-free/sci-fi-pulse-loop/
-Game music: https://www.dl-sounds.com/royalty-free/space-trip/
+- Game images: https://kenney.nl/assets/space-shooter-redux
+- Menu music: https://www.dl-sounds.com/royalty-free/sci-fi-pulse-loop/
+- Game music: https://www.dl-sounds.com/royalty-free/space-trip/
 
 ## License
 

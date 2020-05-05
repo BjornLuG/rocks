@@ -11,9 +11,9 @@ class Cursor
 
   def initialize(window)
     @window = window
-    @img_normal = Gosu::Image.new('lib/assets/images/cursor/normal.png')
-    @img_hover = Gosu::Image.new('lib/assets/images/cursor/active.png')
-    @img_active = Gosu::Image.new('lib/assets/images/cursor/active.png')
+    @img_normal = Gosu::Image.new(Constant::CURSOR_IMG_NORMAL_NAME)
+    @img_hover = Gosu::Image.new(Constant::CURSOR_IMG_HOVER_NAME)
+    @img_active = Gosu::Image.new(Constant::CURSOR_IMG_ACTIVE_NAME)
     @visible = true
     @state = CursorState::NORMAL
   end

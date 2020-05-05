@@ -4,9 +4,6 @@ require_relative 'sprite'
 
 # The floating rocks
 class Rock < Sprite
-  # All rock images' paths
-  @@rocks = Dir[File.join(Dir.pwd, 'lib/assets/images/rocks/*')].sort
-
   attr_reader :has_exited
 
   def initialize(window, rock_index = nil)
@@ -29,8 +26,9 @@ class Rock < Sprite
   # Targets a ship from a random position on window top edge
   def target_ship
     @pos = Vector[rand(@window.width), -@collider_radius]
-    @velocity = Vector[0, 1500] / @collider_radius
-    @rot_velocity = (rand - 0.5) * 20 / @collider_radius
+    @velocity = Vector[0, Constant::ROCK_AVERAGE_SPEED] / @collider_radius
+    @rot_velocity = (rand - 0.5) * Constant::ROCK_AVERAGE_ROT_SPEED /
+                    @collider_radius
   end
 
   def change_rock(index = nil)
@@ -66,10 +64,11 @@ class Rock < Sprite
   end
 
   def rock_image(index)
-    Gosu::Image.new(@@rocks[index % @@rocks.count])
+    all_img_count = Constant::ROCK_ALL_IMG_NAME.count
+    Gosu::Image.new(Constant::ROCK_ALL_IMG_NAME[index % all_img_count])
   end
 
   def random_rock_image
-    rock_image(rand(@@rocks.count))
+    rock_image(rand(Constant::ROCK_ALL_IMG_NAME.count))
   end
 end

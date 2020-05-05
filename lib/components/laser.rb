@@ -20,7 +20,7 @@ class Laser < Sprite
   def shoot(start_pos)
     @pos = start_pos
     @rot = -Math::PI / 2.0
-    @velocity = Vector[0, -600]
+    @velocity = Vector[0, -Constant::LASER_SPEED]
   end
 
   def pool_create

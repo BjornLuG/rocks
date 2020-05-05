@@ -9,14 +9,14 @@ class Game < Gosu::Window
 
     self.caption = Constant::APP_NAME
 
-    @background = Gosu::Image.new('lib/assets/images/background.png')
+    @background = Gosu::Image.new(Constant::BG_IMAGE_NAME)
 
     # Mouse cursor image
     @cursor = Cursor.new(self)
 
     # Setup music
-    @game_music = Gosu::Song.new('lib/assets/sound/music/game.mp3')
-    @menu_music = Gosu::Song.new('lib/assets/sound/music/menu.mp3')
+    @game_music = Gosu::Song.new(Constant::GAME_MUSIC_NAME)
+    @menu_music = Gosu::Song.new(Constant::MENU_MUSIC_NAME)
 
     # Reduce game music's volume, because it's loud
     @game_music.volume = 0.25

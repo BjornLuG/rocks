@@ -21,7 +21,7 @@ class PlayScene < Scene
     @paused = false
 
     # Rock collide sound
-    @crash_sfx = Gosu::Sample.new('lib/assets/sound/sfx/crash.ogg')
+    @crash_sfx = Gosu::Sample.new(Constant::CRASH_SFX_NAME)
 
     @current_ui_scene = PlayUIMainScene.new(@window, self)
 
@@ -79,14 +79,7 @@ class PlayScene < Scene
   private
 
   def init_ship
-    @ship = Ship.new(
-      @window,
-      @laser_pool,
-      {
-        health: 3,
-        shoot_interval: 200
-      }
-    )
+    @ship = Ship.new(@window, @laser_pool)
 
     @ship.pos = Vector[
       @window.width / 2.0,
@@ -97,7 +90,9 @@ class PlayScene < Scene
   end
 
   def update_rock_spawn
-    return unless Gosu.milliseconds - @prev_rock_spawn_ms > 1000
+    current_interval = Gosu.milliseconds - @prev_rock_spawn_ms
+
+    return unless current_interval > Constant::ROCK_SPAWN_INTERVAL
 
     rock = @rock_pool.spawn
 

@@ -6,20 +6,19 @@ require_relative 'sprite'
 class Ship < Sprite
   attr_reader :health
 
-  def initialize(window, laser_pool, specs)
-    super(Gosu::Image.new('lib/assets/images/ship.png'), ZOrder::SHIP)
+  def initialize(window, laser_pool)
+    super(Gosu::Image.new(Constant::SHIP_IMG_NAME), ZOrder::SHIP)
 
     @window = window
     @laser_pool = laser_pool
-    @specs = specs
 
-    @health = specs[:health]
+    @health = Constant::SHIP_HEALTH
 
     # Cache last shoot time to calculate shoot interval
     @last_shoot_ms = Gosu.milliseconds
 
-    @shoot_sfx = Gosu::Sample.new('lib/assets/sound/sfx/shoot.ogg')
-    @hurt_sfx = Gosu::Sample.new('lib/assets/sound/sfx/hurt.ogg')
+    @shoot_sfx = Gosu::Sample.new(Constant::SHOOT_SFX_NAME)
+    @hurt_sfx = Gosu::Sample.new(Constant::HURT_SFX_NAME)
   end
 
   def update(dt)
@@ -40,7 +39,7 @@ class Ship < Sprite
   private
 
   def can_shoot
-    if Gosu.milliseconds - @last_shoot_ms > @specs[:shoot_interval]
+    if Gosu.milliseconds - @last_shoot_ms > Constant::SHIP_SHOOT_INTERVAL
       @last_shoot_ms = Gosu.milliseconds
       true
     else

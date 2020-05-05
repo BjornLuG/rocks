@@ -44,7 +44,7 @@ class Button
     @anchor_y = 0
 
     @button_click_up = false
-    @click_sfx = Gosu::Sample.new('lib/assets/sound/sfx/click.ogg')
+    @click_sfx = Gosu::Sample.new(Constant::CLICK_SFX_NAME)
 
     update_rect_properties
   end
