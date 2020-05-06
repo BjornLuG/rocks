@@ -3,9 +3,11 @@
 # Main text input
 # Reference: https://github.com/gosu/gosu-examples/blob/master/examples/text_input.rb
 class TextInput < Gosu::TextInput
-  INACTIVE_COLOR  = 0xcc_666666
-  ACTIVE_COLOR    = 0xcc_ff6666
-  CARET_COLOR     = 0xff_ffffff
+  INACTIVE_COLOR    = 0xcc_666666
+  ACTIVE_COLOR      = 0xcc_ff6666
+  CARET_COLOR       = 0xff_ffffff
+  PLACEHOLDER_COLOR = 0x88_ffffff
+  TEXT_COLOR        = 0xff_ffffff
 
   attr_reader :x, :y
 
@@ -18,10 +20,9 @@ class TextInput < Gosu::TextInput
     @y = y
     @z = z
     @w = w
+    @placeholder = placeholder
 
     update_rect
-
-    self.text = placeholder
   end
 
   def button_down(id)
@@ -56,7 +57,17 @@ class TextInput < Gosu::TextInput
       )
     end
 
-    @font.draw_text_rel(text, @x + 10, @y + @rect_height / 2, @z, 0, 0.5)
+    @font.draw_text_rel(
+      text.empty? ? @placeholder : text,
+      @x + 10,
+      @y + @rect_height / 2,
+      @z,
+      0,
+      0.5,
+      1,
+      1,
+      text.empty? ? PLACEHOLDER_COLOR : TEXT_COLOR
+    )
   end
 
   def in_focus?
