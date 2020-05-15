@@ -2,18 +2,17 @@
 
 ![CI](https://github.com/BjornLuG/rocks/workflows/CI/badge.svg)
 
-Uni programming project
+Uni programming project. A classic space shooter.
 
 ## Install
 
-Make sure you have [Bundler](https://bundler.io/) to install the project's
-dependencies.
+This game is only tested with Ruby 2.6.5. Higher versions should work.
 
-After that, we need to install some dependencies for [Gosu](https://github.com/gosu/gosu).
-Follow the [installation guide](https://github.com/gosu/gosu/wiki#installation)
-to get started. You can skip this if you're using Windows.
+Make sure [Bundler](https://bundler.io/)  is installed.
 
-Then, we install the dependencies with Bundler:
+Depending on your OS, [Gosu](https://github.com/gosu/gosu) might need external dependencies for it to work. Follow its [installation guide](https://github.com/gosu/gosu/wiki#installation) to get started.
+
+Then, install the dependencies with Bundler:
 
 ```bash
 # Install all dependencies
