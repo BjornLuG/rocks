@@ -55,6 +55,11 @@ class HighscoreManager
   # Creates highscore file.
   # Overwrite true will clear file create new file even if already exist.
   def create_file(override = false)
+    dir = File.dirname(Constant::HIGHSCORE_FILE_NAME)
+
+    # Create directory if not exist
+    FileUtils.mkdir_p(dir) unless File.directory?(dir)
+
     # Fake open a file to create
     File.open(Constant::HIGHSCORE_FILE_NAME, override ? 'w' : 'a') {}
   end
