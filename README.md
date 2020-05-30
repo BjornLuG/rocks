@@ -17,13 +17,9 @@ Then, install the dependencies with Bundler:
 ```bash
 # Install all dependencies
 $ bundle install
-
-# Or install for production only
-$ bundle install --without dev
 ```
 
-> If Bundler fails with `Can't find gem bundler (>= 0.a) with executable bundle (Gem::GemNotFoundException)`,
-try updating bundler with `gem install bundler`. [More info](https://bundler.io/blog/2019/01/04/an-update-on-the-bundler-2-release.html).
+> If Bundler fails with `Can't find gem bundler (>= 0.a) with executable bundle (Gem::GemNotFoundException)`, try updating bundler with `gem install bundler`. [More info](https://bundler.io/blog/2019/01/04/an-update-on-the-bundler-2-release.html).
 
 ## Play
 
@@ -33,6 +29,18 @@ $ bundle exec ruby rocks.rb
 
 # or use Rake
 $ bundle exec rake start
+```
+
+## Development
+
+Besides the above command for play-testing, there are other rake commands for linting:
+
+```bash
+# Run Rubocop lint
+$ bundle exec rake rubocop
+
+# Autocorrect Rubocop fixable errors
+$ bundle exec rake rubocop:auto_correct
 ```
 
 ## Attributions
