@@ -48,6 +48,8 @@ class Ship < Sprite
   end
 
   def update_position
+    # Ruby 2.5.x and below doesn't publicize the []= method :(
+    # Just in case you hit an error.
     @pos[0] = [0, @window.mouse_x, @window.width].sort[1]
   end
 

@@ -6,9 +6,9 @@ Uni programming project. A classic space shooter.
 
 ## Install
 
-This game is only tested with Ruby 2.6.5. Higher versions should work.
+This game is only tested with Ruby 2.6.5. Higher versions should work. Any version lower may break the game.
 
-Make sure [Bundler](https://bundler.io/)  is installed.
+Make sure [Bundler](https://bundler.io/) is installed.
 
 Depending on your OS, [Gosu](https://github.com/gosu/gosu) might need external dependencies for it to work. Follow its [installation guide](https://github.com/gosu/gosu/wiki#installation) to get started.
 
@@ -33,7 +33,7 @@ $ bundle exec rake start
 
 ## Development
 
-Besides the above command for play-testing, there are other rake commands for linting:
+Besides the commands above for play-testing, there are other rake commands for linting:
 
 ```bash
 # Run Rubocop lint
