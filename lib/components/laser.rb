@@ -24,7 +24,7 @@ class Laser < Sprite
   end
 
   # Object pool functions
-  
+
   def pool_create
     @active = false
   end

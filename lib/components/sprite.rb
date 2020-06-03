@@ -39,7 +39,7 @@ class Sprite
     # Relative distance
     x_dist = (other_sprite.pos[0] - @pos[0]).abs
     y_dist = (other_sprite.pos[1] - @pos[1]).abs
-  
+
     # Min collision distance
     collide_dist = @collider_radius + other_sprite.collider_radius
 

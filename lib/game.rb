@@ -26,7 +26,8 @@ class Game < Gosu::Window
     @dt = 0
 
     # Custom scene management.
-    # Scenes separates different logic of the game, e.g. Main menu, game, highscore view.
+    # Scenes separates different logic of the game,
+    # e.g. Main menu, game, highscore view.
     # Scene is nothing more than a class that accepts a window
     @current_scene = MenuScene.new(self)
   end
