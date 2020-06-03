@@ -34,9 +34,13 @@ class Sprite
     )
   end
 
+  # Collision detection
   def collide?(other_sprite)
+    # Relative distance
     x_dist = (other_sprite.pos[0] - @pos[0]).abs
     y_dist = (other_sprite.pos[1] - @pos[1]).abs
+  
+    # Min collision distance
     collide_dist = @collider_radius + other_sprite.collider_radius
 
     # Preliminary check if x, y distance is more than collide.

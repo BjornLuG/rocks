@@ -19,6 +19,7 @@ class Cursor
   end
 
   def draw
+    # Draw cursor image if set to visible and is in window bounds
     if @visible && in_window?
       current_img&.draw(
         @window.mouse_x - current_img.width / 2,

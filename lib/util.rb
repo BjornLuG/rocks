@@ -22,7 +22,6 @@ module Util
   end
 
   # Returns new color with alpha of value between 0 to 1.
-  # I did not copy this.
   def self.gosu_color_change_alpha(color, value)
     # Convert value to 2^8 which means 0xff and floor it
     alpha_hex = (value * 256).floor.clamp(0, 255)

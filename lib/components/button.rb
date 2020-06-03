@@ -106,6 +106,7 @@ class Button
 
   private
 
+  # Recompute variables in case attr_accessor variables change
   def update_rect_properties
     @text_width = @font.text_width(@text)
     @rect_width = @text_width + @font.height * 2

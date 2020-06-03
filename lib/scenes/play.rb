@@ -45,18 +45,22 @@ class PlayScene < Scene
 
     return if @paused || @game_ended
 
+    # Spawn rocks based on interval
     update_rock_spawn
 
+    # Collision detection
     check_laser_rock_collision
     check_ship_rock_collision
 
     @ship.update(dt)
 
+    # Update active rocks, despawn if out of bounds
     @rock_pool.active_objects.each do |rock|
       rock.update(dt)
       @rock_pool.despawn(rock) if rock.has_exited
     end
 
+    # Update active laser, despawn if out of bounds
     @laser_pool.active_objects.each do |laser|
       laser.update(dt)
       @laser_pool.despawn(laser) if laser.has_exited

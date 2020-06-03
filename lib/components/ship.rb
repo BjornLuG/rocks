@@ -39,6 +39,7 @@ class Ship < Sprite
   private
 
   def can_shoot
+    # Check shoot interval
     if Gosu.milliseconds - @last_shoot_ms > Constant::SHIP_SHOOT_INTERVAL
       @last_shoot_ms = Gosu.milliseconds
       true
@@ -50,6 +51,7 @@ class Ship < Sprite
   def update_position
     # Ruby 2.5.x and below doesn't publicize the []= method :(
     # Just in case you hit an error.
+    # This works like clamp.
     @pos[0] = [0, @window.mouse_x, @window.width].sort[1]
   end
 

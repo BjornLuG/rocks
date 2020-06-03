@@ -88,10 +88,13 @@ class PlayUIEndScene < Scene
     draw_game_over
     draw_score
 
+    # Show different views depednign if have highscore
     if highscore?
+      # Input name and transition to highscore view
       @name_input.draw
       @done_button.draw
     else
+      # Play again or menu button
       @play_again_button.draw
       @menu_button.draw
     end

@@ -23,6 +23,8 @@ class Laser < Sprite
     @velocity = Vector[0, -Constant::LASER_SPEED]
   end
 
+  # Object pool functions
+  
   def pool_create
     @active = false
   end
@@ -42,11 +44,13 @@ class Laser < Sprite
 
   private
 
+  # Checks whether have exited screen
   def update_exit_state
     return unless @active
 
     return if @has_exited
 
+    # y axis is negative means out of bounds since laser shoots up
     @has_exited = @pos[1].negative?
   end
 end

@@ -36,6 +36,8 @@ class Rock < Sprite
     @collider_radius = [@img.width, @img.height].max / 2.0
   end
 
+  # Object pool functions
+
   def pool_create
     @active = false
   end
@@ -55,14 +57,17 @@ class Rock < Sprite
 
   private
 
+  # Checks whether have exited screen
   def update_exit_state
     return unless @active
 
     return if @has_exited
 
+    # Check if went below screen since it travels downwards
     @has_exited = @pos[1] > @window.height
   end
 
+  # Get rock image based on index from rock image list
   def rock_image(index)
     all_img_count = Constant::ROCK_ALL_IMG_NAME.count
     Gosu::Image.new(Constant::ROCK_ALL_IMG_NAME[index % all_img_count])
